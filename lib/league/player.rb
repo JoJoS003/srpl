@@ -4,11 +4,13 @@ module League
 
   class Player
     
-    attr_reader :name, :wins, :defeats, 
-      :desertions, :opponent_desertions
+    attr_reader :name # String : name of player
+    attr_accessor :character # String : character playing
+    attr_reader :wins, :defeats, :desertions, :opponent_desertions # Integer : scores
 
-    def initialize(infos = {})
-      @name = infos[:name] ? infos[:name] : ''
+    def initialize(name, character = '', infos = {})
+      @name = name
+      @character = character
       @wins = infos[:wins] ? infos[:wins].to_i : 0
       @defeats = infos[:defeats] ? infos[:defeats].to_i : 0
       @desertions = infos[:desertions] ? infos[:desertions].to_i : 0
@@ -18,10 +20,15 @@ module League
     def score
       @wins * WIN_POINTS + @defeats * DEFEAT_POINTS + @desertions * DESERTION_POINTS + @opponent_desertions * OPPONENT_DESERTION_POINTS
     end
-
+    
+    # Type can be win, defeat, desertion, opponent_desertion
+    def add(type = 'win')
+      instance_variable_set("@#{type}s", instance_variable_get("@#{type}s") + 1)
+    end
+    
     def method_missing(method_name, *args, &block)
-      if(/^add_(?<attribute>\w+)$/ =~ method_name)
-        instance_variable_set("@#{attribute}", instance_variable_get("@#{attribute}") + 1) 
+      if(/^add_(?<type>\w+)$/ =~ method_name)
+        send("add", type)
       else
         super
       end
