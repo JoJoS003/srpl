@@ -41,6 +41,15 @@ module League
       @winner != nil
     end
     
+    def ==(another_match)
+      if another_match.is_a? Match
+        @player_1 == another_match.player_1 && 
+          @player_2 == another_match.player_2
+      else
+        false
+      end
+    end
+    
   end
 
 end

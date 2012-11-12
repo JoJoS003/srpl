@@ -33,7 +33,15 @@ module League
         super
       end
     end
-
+    
+    def ==(another_player)
+      if another_player.is_a? Player
+        @name == another_player.name
+      else
+        false
+      end
+    end
+    
   end
 
 end
