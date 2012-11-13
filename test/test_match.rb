@@ -1,9 +1,9 @@
 require 'test/unit'
 
-require 'league/player'
-require 'league/match'
+require 'srpl/player'
+require 'srpl/match'
 
-include League
+include SRPL
 
 class TestMatch < Test::Unit::TestCase
 

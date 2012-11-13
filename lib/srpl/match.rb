@@ -1,6 +1,6 @@
-require 'league/player'
+require 'srpl/player'
 
-module League
+module SRPL
 
   class Match
     

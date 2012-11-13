@@ -1,6 +1,6 @@
-require 'league/rules'
+require 'srpl/rules'
 
-module League
+module SRPL
 
   class Player
     

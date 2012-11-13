@@ -1,10 +1,10 @@
 require 'test/unit'
 
-require 'league/player'
-require 'league/match'
-require 'league/league'
+require 'srpl/player'
+require 'srpl/match'
+require 'srpl/league'
 
-include League
+include SRPL
 
 class TestLeague < Test::Unit::TestCase
 
@@ -24,11 +24,13 @@ class TestLeague < Test::Unit::TestCase
   def test_match
     league = League.new @p1, @p2, @p3, @p4
 
-    league.instance_eval([@m1, @m2, @m3, @m4]) do |matchs|
-      @match.concat(matchs)
+    league.instance_exec([@m1, @m2, @m3, @m4]) do |matchs|
+      @matchs.concat(matchs)
     end
 
     assert_equal(@m1, league.match(@p1, @p2))
-    refute_equal(@m2, league_match(@p1, @p2))
+    assert_equal(@m2, league.match(@p2, @p3))
+    refute_equal(@m4, league.match(@p4, @p2))
+    refute_equal(@m2, league.match(@p1, @p2))
   end
 end

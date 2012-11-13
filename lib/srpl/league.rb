@@ -1,13 +1,13 @@
-require 'league/player'
-require 'league/match'
+require 'srpl/player'
+require 'srpl/match'
 
-module League
+module SRPL
 
   class League
     
     attr_reader :players, :matchs
     
-    def initialize(players = [])
+    def initialize(*players)
       @players = players
       @matchs = []
     end

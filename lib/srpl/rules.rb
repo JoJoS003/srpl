@@ -1,4 +1,4 @@
-module League
+module SRPL
   WIN_POINTS = 4
   DEFEAT_POINTS = 1
   DESERTION_POINTS = -2
