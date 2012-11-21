@@ -4,6 +4,8 @@ require 'srpl/player'
 require 'srpl/match'
 require 'srpl/league'
 
+require 'pp'
+
 include SRPL
 
 class TestLeague < Test::Unit::TestCase
@@ -18,7 +20,6 @@ class TestLeague < Test::Unit::TestCase
     @m2 = Match.new @p2, @p3
     @m3 = Match.new @p1, @p3
     @m4 = Match.new @p2, @p4
-    @m5 = Match.new @p3, @p4
   end
 
   def test_match
@@ -27,10 +28,22 @@ class TestLeague < Test::Unit::TestCase
     league.instance_exec([@m1, @m2, @m3, @m4]) do |matchs|
       @matchs.concat(matchs)
     end
-
-    assert_equal(@m1, league.match(@p1, @p2))
-    assert_equal(@m2, league.match(@p2, @p3))
-    refute_equal(@m4, league.match(@p4, @p2))
-    refute_equal(@m2, league.match(@p1, @p2))
+    
+    assert_includes(league.find_match(@p1, @p2), @m1)
+    assert_includes(league.find_match(@p2, @p3), @m2)
+    assert_includes(league.find_match(@p4, @p2), @m4)
+    refute_includes(league.find_match(@p1, @p2), @m2)
   end
+  
+  def test_find_match_by_player
+    
+  end
+  
+  def test_generate_matchs
+    league = League.new @p1, @p2, @p3
+    assert_equal(3, league.matchs.count)
+    league.add_player(@p4)
+    assert_equal(6, league.matchs.count)
+  end
+  
 end

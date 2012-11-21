@@ -43,8 +43,10 @@ module SRPL
     
     def ==(another_match)
       if another_match.is_a? Match
-        @player_1 == another_match.player_1 && 
-          @player_2 == another_match.player_2
+        (@player_1 == another_match.player_1 && 
+          @player_2 == another_match.player_2) ||
+        (@player_1 == another_match.player_2 && 
+          @player_2 == another_match.player_1)
       else
         false
       end

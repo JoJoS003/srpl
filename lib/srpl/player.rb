@@ -9,7 +9,7 @@ module SRPL
     attr_accessor :character # String : character playing
     attr_reader :wins, :defeats, :desertions, :opponent_desertions # Integer : scores
 
-    def initialize(name, character, email, infos = {})
+    def initialize(name, character = '', email = '', infos = {})
       @name = name.to_s
       @character = character.to_s
       @email = email.to_s
@@ -42,6 +42,10 @@ module SRPL
       else
         false
       end
+    end
+    
+    def to_s
+      @name.to_s
     end
     
   end

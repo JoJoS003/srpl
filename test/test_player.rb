@@ -9,6 +9,9 @@ class TestPlayer < Test::Unit::TestCase
   
   def setup
     @player = Player.new('player', wins: 0, defeats: 0, desertions: 0, opponent_desertions: 0)
+    @player_1 = Player.new('JoJoS')
+    @player_2 = Player.new('Weak')
+    @player_3 = Player.new('Weak')
   end
   
   def test_score
@@ -54,14 +57,14 @@ class TestPlayer < Test::Unit::TestCase
   end
   
   def test_equal
-    player_1 = Player.new('JoJoS')
-    player_2 = Player.new('Weak')
-    player_3 = Player.new('Weak')
-    
-    refute_equal(player_1, player_2)
-    refute_equal(player_1, player_3)
-    assert_equal(player_2, player_2)
-    assert_equal(player_2, player_3)
+    refute_equal(@player_1, @player_2)
+    refute_equal(@player_1, @player_3)
+    assert_equal(@player_2, @player_2)
+    assert_equal(@player_2, @player_3)
+  end
+  
+  def test_to_s
+    assert_equal(@player_1.to_s, 'JoJoS')
   end
   
 end
