@@ -5,12 +5,14 @@ module SRPL
   class Player
     
     attr_reader :name # String : name of player
+    attr_reader :email # String : email of player
     attr_accessor :character # String : character playing
     attr_reader :wins, :defeats, :desertions, :opponent_desertions # Integer : scores
 
-    def initialize(name, character = '', infos = {})
-      @name = name
-      @character = character
+    def initialize(name, character, email, infos = {})
+      @name = name.to_s
+      @character = character.to_s
+      @email = email.to_s
       @wins = infos[:wins] ? infos[:wins].to_i : 0
       @defeats = infos[:defeats] ? infos[:defeats].to_i : 0
       @desertions = infos[:desertions] ? infos[:desertions].to_i : 0
