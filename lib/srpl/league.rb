@@ -31,6 +31,22 @@ module SRPL
       end
     end
     
+    # Return unplayed matchs for each players
+    def round
+      round = []
+      players = []
+      
+      @matchs.shuffle.each do |m|
+        unless m.finished? || players.include?(m.player_1) || players.include?(m.player_2)
+          round << m
+          players << m.player_1
+          players << m.player_2
+        end
+      end
+      
+      round
+    end
+    
     private
     
     # Génère autant de matchs qu'il y a de possibilités de rencontres entre chaque joueurs

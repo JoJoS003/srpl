@@ -41,6 +41,10 @@ module SRPL
       @winner != nil
     end
     
+    def player?(player)
+      @player_1.to_s == player.to_s || @player_2.to_s == player.to_s
+    end
+    
     def ==(another_match)
       if another_match.is_a? Match
         (@player_1 == another_match.player_1 && 

@@ -53,4 +53,14 @@ class TestMatch < Test::Unit::TestCase
     assert_equal(match3, match4)
   end
   
+  def test_player
+    match1 = Match.new(@player_1, @player_2)
+    match2 = Match.new(@player_1, Player.new('Ryugan'))
+    
+    assert(match1.player?(@player_1))
+    assert(match1.player?(@player_2))
+    assert(match2.player?('Ryugan'))
+    refute(match2.player?(@player_2))
+  end
+  
 end
