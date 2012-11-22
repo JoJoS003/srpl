@@ -3,6 +3,8 @@ require 'srpl/rules'
 module SRPL
 
   class Player
+  
+    include Comparable
     
     attr_reader :name # String : name of player
     attr_reader :email # String : email of player
@@ -42,6 +44,11 @@ module SRPL
       else
         false
       end
+    end
+    
+    def <=>(another_player)
+      score_ordering = score <=> another_player.score
+      @name <=> another_player.name if score_ordering == 0
     end
     
     def to_s
