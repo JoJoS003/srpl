@@ -23,7 +23,11 @@ module SRPL
       @towards = infos[:towards] ? infos[:towards].to_i : 0
       @against = infos[:against] ? infos[:against].to_i : 0
     end
-
+    
+    def plays
+      @wins + @defeats
+    end
+    
     def score
       @wins * WIN_POINTS + @defeats * DEFEAT_POINTS + @desertions * DESERTION_POINTS + @opponent_desertions * OPPONENT_DESERTION_POINTS
     end
