@@ -1,8 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'league'
-
-include League
-
-puts "Shoryupif League v#{VERSION}"
-

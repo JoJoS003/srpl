@@ -1,0 +1,98 @@
+#!/usr/bin/env ruby
+#encoding=utf-8
+
+$LOAD_PATH.unshift(File.dirname(__FILE__) + "/../lib")
+
+require 'srpl'
+require 'yaml'
+require 'erb'
+require 'pp'
+
+include SRPL
+
+class SRPL_CLI
+  
+  
+  attr_reader :league
+  
+  def initialize(plist = nil)
+    @file = 'league.yml'
+    from_players(plist.to_s) if plist
+  end
+  
+  def load
+    @league = @file ? YAML::load(File.read(@file)) : League.new
+  end
+  
+  def save
+    File.write(@file, YAML::dump(@league))
+  end
+  
+  def rank
+    template = %{
+<h2>Classement</h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Pseudo</th>
+      <th>Perso</th>
+      <th>Matchs joués</th>
+      <th>Victoires</th>
+      <th>Défaites</th>
+      <th>Score</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% last_rank = 1 %>
+    <% last_score = -1 %>
+    <% players.each_index do |i| %>
+      <% player = players[i] %>
+      <% cur_rank = (player.score == last_score ? last_rank : i+1) %>
+      <% last_rank = cur_rank %>
+      <% last_score = player.score %>
+      <tr>
+        <td align="center"><%= cur_rank %></td>
+        <td><%= player.name %></td>
+        <td><%= player.character %></td>
+        <td align="center"><%= player.wins + player.defeats %></td>
+        <td align="center"><%= player.wins %></td>
+        <td align="center"><%= player.defeats %></td>
+        <td align="center"><%= player.score %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+}
+    players = @league.rank
+    ERB.new(template).result(binding)
+  end
+  
+  private 
+  
+  def from_players(file)
+    reg = /^(?<nick>[\w\s]+) <(?<email>[\w\d\-_.]+@[\w\d-_.]+\.[\w]{2,4})> : (?<chara>[\w\. \-]+)$/
+
+    @league = League.new
+
+    File.open(file, 'r') do |io|
+      io.lines do |line|
+        m = reg.match line
+        @league.add_player(Player.new(m['nick'], m['chara'], m['email'])) if m
+      end
+    end
+    
+    @league
+  end
+
+end
+
+cli = ARGV[0] == 'init' ? SRPL_CLI.new(ARGV[1]) : SRPL_CLI.new
+
+case ARGV[0]
+  when 'init' then cli.save
+  when 'round' then p cli.load.round
+  when 'rank' then 
+    cli.load
+    puts cli.rank
+end

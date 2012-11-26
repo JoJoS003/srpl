@@ -2,6 +2,7 @@ require 'test/unit'
 
 require 'srpl/player'
 require 'srpl/match'
+require 'srpl/round'
 require 'srpl/league'
 
 require 'pp'
@@ -20,6 +21,9 @@ class TestLeague < Test::Unit::TestCase
     @m2 = Match.new @p2, @p3
     @m3 = Match.new @p1, @p3
     @m4 = Match.new @p2, @p4
+    
+    @r1 = Round.new 'r1', [@m1, @m2]
+    @r2 = Round.new 'r2', [@m3, @m4]
   end
 
   def test_match
