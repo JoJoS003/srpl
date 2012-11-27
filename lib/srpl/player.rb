@@ -10,7 +10,7 @@ module SRPL
     attr_reader :email # String : email of player
     attr_accessor :character # String : character playing
     attr_reader :wins, :defeats, :desertions, :opponent_desertions # Integer : scores
-    attr_accessor :towards, :against
+    attr_accessor :towards, :againsts
 
     def initialize(name, character = '', email = '', infos = {})
       @name = name.to_s
@@ -21,7 +21,7 @@ module SRPL
       @desertions = infos[:desertions] ? infos[:desertions].to_i : 0
       @opponent_desertions = infos[:opponent_desertions] ? infos[:opponent_desertions].to_i : 0
       @towards = infos[:towards] ? infos[:towards].to_i : 0
-      @against = infos[:against] ? infos[:against].to_i : 0
+      @againsts = infos[:againsts] ? infos[:againsts].to_i : 0
     end
     
     def plays
@@ -33,7 +33,7 @@ module SRPL
     end
     
     def goal_average
-      @towards - @against
+      @towards - @againsts
     end
     
     # Type can be win, defeat, desertion, opponent_desertion
@@ -59,6 +59,9 @@ module SRPL
     
     def <=>(another_player)
       score_ordering = another_player.score <=> score
+      if score_ordering == 0
+        score_ordering = goal_average <=> another_player.goal_average
+      end
       if score_ordering == 0
         score_ordering = @name <=> another_player.name
       end
