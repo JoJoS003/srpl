@@ -34,13 +34,16 @@ class SRPL_CLI
 <table width="100%">
   <thead>
     <tr>
-      <th>#</th>
-      <th>Pseudo</th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
       <th>Perso</th>
-      <th>Matchs joués</th>
-      <th>Victoires</th>
-      <th>Défaites</th>
-      <th>Score</th>
+      <th>Joueur</th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs pour">P.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs contre">C.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
     </tr>
   </thead>
   <tbody>
@@ -53,18 +56,56 @@ class SRPL_CLI
       <% last_score = player.score %>
       <tr>
         <td align="center"><%= cur_rank %></td>
+        <td align="center"><img title="<%= player.character %>" alt="Image <%= player.character %>" src="<%= perso_img(player.character) %>" width="32px" /></td>
         <td><%= player.name %></td>
-        <td><%= player.character %></td>
-        <td align="center"><%= player.wins + player.defeats %></td>
+        <td align="center"><%= player.plays %></td>
         <td align="center"><%= player.wins %></td>
         <td align="center"><%= player.defeats %></td>
+        <td align="center"><%= player.towards %></td>
+        <td align="center"><%= player.againsts %></td>
         <td align="center"><%= player.score %></td>
+        <td align="center"><%= player.goal_average %></td>
     </tr>
     <% end %>
   </tbody>
+  <tfooter>
+    <tr>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
+      <th>Perso</th>
+      <th>Joueur</th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs pour">P.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs contre">C.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
+    </tr>
+  </tfooter>
 </table>
 }
     players = @league.rank
+    ERB.new(template).result(binding)
+  end
+  
+  def characters
+    template = <<-EOF
+<h2>Persos</h2>
+<ul>
+  <% persos.each do |perso, count| %>
+  <li style="display: inline-block; text-align: center; margin: 5px;">
+    <img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img(perso) %>" width="32px" />x <%= count %>
+  </li>
+  <% end %>
+</ul>
+    EOF
+    
+    persos = {}
+    @league.players.each do |p|
+      persos[p.character] = persos[p.character] ? persos[p.character] + 1 : 1
+    end
+    persos = persos.sort_by {|perso, nbr| nbr}.reverse!
+    
     ERB.new(template).result(binding)
   end
   
@@ -84,6 +125,10 @@ class SRPL_CLI
     
     @league
   end
+  
+  def perso_img(perso)
+    "http://shoryupif.fr/wp-content/uploads/2012/07/sprite_#{perso.downcase}.png"
+  end
 
 end
 
@@ -95,4 +140,7 @@ case ARGV[0]
   when 'rank' then 
     cli.load
     puts cli.rank
+  when 'characters' then
+    cli.load
+    puts cli.characters
 end
