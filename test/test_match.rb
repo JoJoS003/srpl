@@ -25,19 +25,30 @@ class TestMatch < Test::Unit::TestCase
   end
   
   def test_player_1_win
-    @match.player_1_win
+    @match.player_1_win!
     assert_equal(@player_1, @match.winner)
   end
   
   def test_player_2_win
-    @match.player_2_win
+    @match.player_2_win!
     assert_equal(@player_2, @match.winner)
+  end
+  
+  def test_finish
+    @match.finish!(@player_1, 5, 2)
+    assert_equal(@player_1, @match.winner)
+    assert_equal(5, @match.score_1)
+    assert_equal(2, @match.score_2)
+    @match.finish!(@player_2, 5, 2)
+    assert_equal(@player_2, @match.winner)
+    assert_equal(5, @match.score_2)
+    assert_equal(2, @match.score_1)
   end
   
   def test_finished
     refute(@match.finished?)
     
-    @match.player_1_win
+    @match.player_1_win!
     assert(@match.finished?)
   end
   

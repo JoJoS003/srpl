@@ -24,23 +24,41 @@ class TestLeague < Test::Unit::TestCase
     
     @r1 = Round.new 'r1', [@m1, @m2]
     @r2 = Round.new 'r2', [@m3, @m4]
+
+    @league = League.new @p1, @p2, @p3, @p4
   end
-
+  
+  def test_find_player
+    assert_send([@league.find_player('JoJoS'), :include?, @p1])
+    assert_send([@league.find_player(@p3), :include?, @p3])
+  end
+  
   def test_match
-    league = League.new @p1, @p2, @p3, @p4
-
-    league.instance_exec([@m1, @m2, @m3, @m4]) do |matchs|
+    @league.instance_exec([@m1, @m2, @m3, @m4]) do |matchs|
       @matchs.concat(matchs)
     end
     
-    assert_includes(league.find_match(@p1, @p2), @m1)
-    assert_includes(league.find_match(@p2, @p3), @m2)
-    assert_includes(league.find_match(@p4, @p2), @m4)
-    refute_includes(league.find_match(@p1, @p2), @m2)
+    assert_includes(@league.find_match(@p1, @p2), @m1)
+    assert_includes(@league.find_match(@p2, @p3), @m2)
+    assert_includes(@league.find_match(@p4, @p2), @m4)
+    refute_includes(@league.find_match(@p1, @p2), @m2)
   end
   
   def test_find_match_by_player
     
+  end
+  
+  def test_refresh
+    match = @league.find_match_by_players(@p1, @p2)[0]
+    match.finish!(@p2, 5, 3)
+    @league.refresh
+    
+    assert_equal(1, @p1.defeats)
+    assert_equal(5, @p1.againsts)
+    assert_equal(3, @p1.towards)
+    assert_equal(1, @p2.wins)
+    assert_equal(5, @p2.towards)
+    assert_equal(3, @p2.againsts)
   end
   
   def test_generate_matchs

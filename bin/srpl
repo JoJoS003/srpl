@@ -109,6 +109,49 @@ class SRPL_CLI
     ERB.new(template).result(binding)
   end
   
+  def rounds
+    template = <<-EOF
+<h2><%= round.name %></h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>J1</th>
+      <th>Score J1</th>
+      <th>vs</th>
+      <th>Score J2</th>
+      <th>J2</th>
+      <th>Vidéo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% round.sort_by{|match| match.date ? match.date : 'zzzzzzzz' }.each do |match| %>
+    <tr style='<% unless match.finished? %>background-color: #bcbcbc<% end %>'>
+      <td><%= format_date(match.date) %></td>
+      <td align="right"><%= match.player_1 %></td>
+      <td align="center"><%= match.score_1 %></td>
+      <td align="center">vs</td>
+      <td align="center"><%= match.score_2 %></td>
+      <td align="left"><%= match.player_2 %></td>
+      <td align="center">
+      <% if match.video %>
+        <a href='<%= match.video %>'>
+      <% else %>
+        <a>
+      <% end %>
+      <img title="Vidéo" src="http://shoryupif.fr/wp-content/uploads/2012/11/video_<%= match.video ? 'on' : 'off' %>.png" alt="" width="24" height="24"></a></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+    EOF
+    output = ''
+    @league.rounds.each do |round|
+      output += ERB.new(template).result(binding)
+    end
+    output
+  end
+  
   private 
   
   def from_players(file)
@@ -129,12 +172,19 @@ class SRPL_CLI
   def perso_img(perso)
     "http://shoryupif.fr/wp-content/uploads/2012/07/sprite_#{perso.downcase}.png"
   end
-
+  
+  def format_date(date)
+    format_in = "%Y%m%d%H%M"
+    format_out = "%d/%m/%Y à %Hh%M"
+    
+    date ? DateTime.strptime(date, format_in).strftime(format_out) : 'à venir'
+  end
+  
 end
 
 cli = ARGV[0] == 'init' ? SRPL_CLI.new(ARGV[1]) : SRPL_CLI.new
 
-case ARGV[0]
+case ARGV.shift
   when 'init' then cli.save
   when 'round' then p cli.load.round
   when 'rank' then 
@@ -143,4 +193,10 @@ case ARGV[0]
   when 'characters' then
     cli.load
     puts cli.characters
+  when 'rounds' then
+    cli.load
+    puts cli.rounds
+  when 'finish' then
+    cli.load
+    puts cli.finish *ARGV
 end

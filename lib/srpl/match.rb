@@ -29,12 +29,26 @@ module SRPL
       @score_2 = score.to_i
     end
     
-    def player_1_win
+    def player_1_win!
       @winner = @player_1
     end
     
-    def player_2_win
+    def player_2_win!
       @winner = @player_2
+    end
+    
+    def finish!(winner, score_w, score_l, video = nil)
+      if(winner.to_s == @player_1.to_s || winner == 1)
+        @score_1 = score_w.to_i
+        @score_2 = score_l.to_i
+        player_1_win!
+        @video = video
+      elsif(winner.to_s == @player_2.to_s || winner == 2)
+        @score_1 = score_l.to_i
+        @score_2 = score_w.to_i
+        player_2_win!
+        @video = video
+      end
     end
     
     def finished?

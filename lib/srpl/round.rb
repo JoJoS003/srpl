@@ -1,13 +1,15 @@
 require 'srpl/player'
 require 'srpl/match'
+require 'srpl/matchs_container'
 
 module SRPL
 
   class Round
     
     include Enumerable
+    include MatchsContainer
     
-    attr_accessor :matchs
+    attr_accessor :name, :matchs
     
     def initialize(name = '', matchs = [])
       @name = name

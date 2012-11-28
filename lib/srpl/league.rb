@@ -1,9 +1,12 @@
 require 'srpl/player'
 require 'srpl/match'
+require 'srpl/matchs_container'
 
 module SRPL
 
   class League
+    
+    include MatchsContainer
     
     attr_reader :players, :matchs, :rounds
     
@@ -18,17 +21,10 @@ module SRPL
       @players << player
       generate_matchs
     end
-
-    # Search and return a match contains the two players
-    def find_match(p1, p2)
-      @matchs.select do |match|
-        (match.player_1.to_s == p1.to_s && match.player_2.to_s == p2.to_s) || (match.player_1.to_s == p2.to_s && match.player_2.to_s == p1.to_s)
-      end
-    end
     
-    def find_match_by_player(player)
-      @matchs.select do |match|
-        match.player_1.to_s == player.to_s || match.player_2.to_s == player.to_s
+    def find_player(name)
+      @players.select do |player|
+        player.name == name.to_s
       end
     end
     
@@ -54,7 +50,38 @@ module SRPL
 #      rank.each { |player| yield player } if block_given?
       @players.sort
     end
-
+    
+    # Refresh players score
+    def refresh
+      @players.each do |player|
+        wins = 0
+        defeats = 0
+        towards = 0
+        againsts = 0
+        
+        matchs = find_match_by_player(player)
+        matchs.each do |match|
+          next unless match.finished? # skip unfinished matchs
+          
+          if match.winner == player
+            wins += 1
+          else
+            defeats += 1
+          end
+          
+          towards = match.player_1 == player ? match.score_1 : match.score_2
+          againsts = match.player_1 == player ? match.score_2 : match.score_1
+        end
+        
+        player.instance_exec(wins, defeats, towards, againsts) do |w, d, t, a|
+          @wins = w
+          @defeats = d
+          @towards = t
+          @againsts = a
+        end
+      end
+    end
+    
     private
     
     # Génère autant de matchs qu'il y a de possibilités de rencontres entre chaque joueurs
