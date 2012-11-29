@@ -60,7 +60,7 @@ module SRPL
     def <=>(another_player)
       score_ordering = another_player.score <=> score
       if score_ordering == 0
-        score_ordering = goal_average <=> another_player.goal_average
+        score_ordering = another_player.goal_average <=> goal_average
       end
       if score_ordering == 0
         score_ordering = @name <=> another_player.name

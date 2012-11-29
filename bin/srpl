@@ -51,9 +51,9 @@ class SRPL_CLI
     <% last_score = -1 %>
     <% players.each_index do |i| %>
       <% player = players[i] %>
-      <% cur_rank = (player.score == last_score ? last_rank : i+1) %>
+      <% cur_rank = (player.score+player.goal_average == last_score ? last_rank : i+1) %>
       <% last_rank = cur_rank %>
-      <% last_score = player.score %>
+      <% last_score = player.score+player.goal_average %>
       <tr>
         <td align="center"><%= cur_rank %></td>
         <td align="center"><img title="<%= player.character %>" alt="Image <%= player.character %>" src="<%= perso_img(player.character) %>" width="32px" /></td>
@@ -129,9 +129,9 @@ class SRPL_CLI
     <tr style='<% unless match.finished? %>background-color: #bcbcbc<% end %>'>
       <td><%= format_date(match.date) %></td>
       <td align="right"><%= match.player_1 %></td>
-      <td align="center"><%= match.score_1 %></td>
+      <td align="center" <% if match.winner == match.player_1 %>style="color: #00bf55;"<% elsif match.winner == match.player_2 %>style="color: #c31212;"<% end %>><%= match.score_1 %></td>
       <td align="center">vs</td>
-      <td align="center"><%= match.score_2 %></td>
+      <td align="center" <% if match.winner == match.player_2 %>style="color: #00bf55;"<% elsif match.winner == match.player_1 %>style="color: #c31212;"<% end %>><%= match.score_2 %></td>
       <td align="left"><%= match.player_2 %></td>
       <td align="center">
       <% if match.video %>
