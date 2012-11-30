@@ -49,6 +49,7 @@ module SRPL
         player_2_win!
         @video = video
       end
+      self
     end
     
     def finished?

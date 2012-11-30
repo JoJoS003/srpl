@@ -20,6 +20,7 @@ module SRPL
     def add_player(player)
       @players << player
       generate_matchs
+      @players
     end
     
     def find_player(name)
@@ -80,6 +81,7 @@ module SRPL
           @againsts = a
         end
       end
+      self
     end
     
     private
