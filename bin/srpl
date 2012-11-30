@@ -12,12 +12,15 @@ include SRPL
 
 class SRPL_CLI
   
-  
   attr_reader :league
+  attr_accessor :tpl_path
   
   def initialize(plist = nil)
     @file = 'league.yml'
     from_players(plist.to_s) if plist
+
+    game = File.basename(Dir.pwd)
+    @tpl_path = "#{File.dirname(__FILE__)}/../tpl/#{game}"
   end
   
   def load
@@ -29,119 +32,24 @@ class SRPL_CLI
   end
   
   def rank
-    template = %{
-<h2>Classement</h2>
-<table width="100%">
-  <thead>
-    <tr>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
-      <th>Perso</th>
-      <th>Joueur</th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% last_rank = 1 %>
-    <% last_score = -1 %>
-    <% players.each_index do |i| %>
-      <% player = players[i] %>
-      <% cur_rank = (player.score+player.goal_average == last_score ? last_rank : i+1) %>
-      <% last_rank = cur_rank %>
-      <% last_score = player.score+player.goal_average %>
-      <tr>
-        <td align="center"><%= cur_rank %></td>
-        <td align="center"><img title="<%= player.character %>" alt="Image <%= player.character %>" src="<%= perso_img(player.character) %>" width="32px" /></td>
-        <td><%= player.name %></td>
-        <td align="center"><%= player.plays %></td>
-        <td align="center" style="color: #00bf55;"><%= player.wins %></td>
-        <td align="center" style="color: #c31212;"><%= player.defeats %></td>
-        <td align="center"><strong><%= player.score %></strong></td>
-        <td align="center"><strong><%= player.goal_average > 0 ? ('+' + player.goal_average.to_s) : player.goal_average %></strong></td>
-    </tr>
-    <% end %>
-  </tbody>
-  <tfooter>
-    <tr>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
-      <th>Perso</th>
-      <th>Joueur</th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
-    </tr>
-  </tfooter>
-</table>
-}
     players = @league.rank
-    ERB.new(template).result(binding)
+    template('rank').result(binding)
   end
   
   def characters
-    template = <<-EOF
-<h2>Persos</h2>
-<ul>
-  <% persos.each do |perso, count| %>
-  <li style="display: inline-block; text-align: center; margin: 5px;">
-    <img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img(perso) %>" width="32px" />x <%= count %>
-  </li>
-  <% end %>
-</ul>
-    EOF
-    
     persos = {}
     @league.players.each do |p|
       persos[p.character] = persos[p.character] ? persos[p.character] + 1 : 1
     end
     persos = persos.sort_by {|perso, nbr| nbr}.reverse!
     
-    ERB.new(template).result(binding)
+    template('characters').result(binding)
   end
   
   def rounds
-    template = <<-EOF
-<h2><%= round.name %></h2>
-<table width="100%">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>J1</th>
-      <th>Score J1</th>
-      <th>vs</th>
-      <th>Score J2</th>
-      <th>J2</th>
-      <th>Vidéo</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% round.sort_by{|match| match.date ? match.date : 'zzzzzzzz' }.each do |match| %>
-    <tr style='<% unless match.finished? %>background-color: #bcbcbc<% end %>'>
-      <td><%= format_date(match.date) %></td>
-      <td align="right"><%= match.player_1 %></td>
-      <td align="center" <% if match.winner == match.player_1 %>style="color: #00bf55;"<% elsif match.winner == match.player_2 %>style="color: #c31212;"<% end %>><%= match.score_1 %></td>
-      <td align="center">vs</td>
-      <td align="center" <% if match.winner == match.player_2 %>style="color: #00bf55;"<% elsif match.winner == match.player_1 %>style="color: #c31212;"<% end %>><%= match.score_2 %></td>
-      <td align="left"><%= match.player_2 %></td>
-      <td align="center">
-      <% if match.video %>
-        <a href='<%= match.video %>'>
-      <% else %>
-        <a>
-      <% end %>
-      <img title="Vidéo" src="http://shoryupif.fr/wp-content/uploads/2012/11/video_<%= match.video ? 'on' : 'off' %>.png" alt="" width="24" height="24"></a></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-    EOF
     output = ''
     @league.rounds.reverse.each do |round|
-      output += ERB.new(template).result(binding)
+      output += template('rounds').result(binding)
     end
     output
   end
@@ -174,6 +82,16 @@ class SRPL_CLI
     date ? DateTime.strptime(date, format_in).strftime(format_out) : 'à venir'
   end
   
+  def template(name)
+    ERB.new(File.read(File.join(@tpl_path, "#{name}.html.erb")))
+  end
+  
+end
+
+# Get the template path if defined if first option
+if ARGV[0] == '--template-path'
+  ARGV.shift
+  tpl_path = ARGV.shift
 end
 
 cli = ARGV[0] == 'init' ? SRPL_CLI.new(ARGV[1]) : SRPL_CLI.new

@@ -1,0 +1,8 @@
+<h2>Persos</h2>
+<ul>
+  <% persos.each do |perso, count| %>
+  <li style="display: inline-block; text-align: center; margin: 5px;">
+    <img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img(perso) %>" width="32px" />x <%= count %>
+  </li>
+  <% end %>
+</ul>
