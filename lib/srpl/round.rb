@@ -20,6 +20,10 @@ module SRPL
       @matchs.each { |m| yield m }
     end
     
+    def <<(match)
+      @matchs << match
+    end
+    
   end
   
 end
