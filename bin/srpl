@@ -40,8 +40,6 @@ class SRPL_CLI
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs pour">P.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs contre">C.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
     </tr>
@@ -59,12 +57,10 @@ class SRPL_CLI
         <td align="center"><img title="<%= player.character %>" alt="Image <%= player.character %>" src="<%= perso_img(player.character) %>" width="32px" /></td>
         <td><%= player.name %></td>
         <td align="center"><%= player.plays %></td>
-        <td align="center"><%= player.wins %></td>
-        <td align="center"><%= player.defeats %></td>
-        <td align="center"><%= player.towards %></td>
-        <td align="center"><%= player.againsts %></td>
-        <td align="center"><%= player.score %></td>
-        <td align="center"><%= player.goal_average %></td>
+        <td align="center" style="color: #00bf55;"><%= player.wins %></td>
+        <td align="center" style="color: #c31212;"><%= player.defeats %></td>
+        <td align="center"><strong><%= player.score %></strong></td>
+        <td align="center"><strong><%= player.goal_average > 0 ? ('+' + player.goal_average.to_s) : player.goal_average %></strong></td>
     </tr>
     <% end %>
   </tbody>
@@ -76,8 +72,6 @@ class SRPL_CLI
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs pour">P.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs contre">C.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
     </tr>
@@ -146,7 +140,7 @@ class SRPL_CLI
 </table>
     EOF
     output = ''
-    @league.rounds.each do |round|
+    @league.rounds.reverse.each do |round|
       output += ERB.new(template).result(binding)
     end
     output
@@ -199,4 +193,9 @@ case ARGV.shift
   when 'finish' then
     cli.load
     puts cli.finish *ARGV
+  when 'all' then
+    cli.load
+    puts cli.characters
+    puts cli.rank
+    puts cli.rounds
 end
