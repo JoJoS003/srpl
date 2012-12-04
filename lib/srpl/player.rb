@@ -25,7 +25,7 @@ module SRPL
     end
     
     def plays
-      @wins + @defeats
+      @wins + @defeats + @desertions
     end
     
     def score

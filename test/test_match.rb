@@ -74,4 +74,16 @@ class TestMatch < Test::Unit::TestCase
     refute(match2.player?(@player_2))
   end
   
+  def test_desertion
+    refute(@match.desertion?)
+    @match.finish! 1, 0, 0
+    assert(@match.desertion?)
+  end
+  
+  def test_deserted_player
+    assert_nil(@match.deserted_player)
+    @match.finish! 1, 0, 0
+    assert_equal(@player_2, @match.deserted_player)
+  end
+  
 end

@@ -57,6 +57,7 @@ module SRPL
       @players.each do |player|
         wins = 0
         defeats = 0
+        desertions = 0
         towards = 0
         againsts = 0
         
@@ -67,16 +68,21 @@ module SRPL
           if match.winner == player
             wins += 1
           else
-            defeats += 1
+            if match.desertion?
+              desertions += 1
+            else
+              defeats += 1
+            end
           end
           
           towards = match.player_1 == player ? match.score_1 : match.score_2
           againsts = match.player_1 == player ? match.score_2 : match.score_1
         end
         
-        player.instance_exec(wins, defeats, towards, againsts) do |w, d, t, a|
+        player.instance_exec(wins, defeats, desertions, towards, againsts) do |w, d, de, t, a|
           @wins = w
           @defeats = d
+          @desertions = de
           @towards = t
           @againsts = a
         end

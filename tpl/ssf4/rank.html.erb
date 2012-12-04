@@ -6,8 +6,9 @@
       <th>Perso</th>
       <th>Joueur</th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
-      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">G.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">P.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs abandonnés">A.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
     </tr>
@@ -27,6 +28,7 @@
         <td align="center"><%= player.plays %></td>
         <td align="center" style="color: #00bf55;"><%= player.wins %></td>
         <td align="center" style="color: #c31212;"><%= player.defeats %></td>
+        <td align="center" style="color: #df12c0;"><%= player.desertions %></td>
         <td align="center"><strong><%= player.score %></strong></td>
         <td align="center"><strong><%= player.goal_average > 0 ? ('+' + player.goal_average.to_s) : player.goal_average %></strong></td>
     </tr>
@@ -40,6 +42,7 @@
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs perdus">D.</abbr></th>
+      <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs abandonnés">A.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Score">S.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Différence entre pour et contre">Diff.</abbr></th>
     </tr>

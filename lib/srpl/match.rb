@@ -49,6 +49,9 @@ module SRPL
         player_2_win!
         @video = video
       end
+      if desertion?
+        deserted_player.add_desertion
+      end
       self
     end
     
@@ -58,6 +61,18 @@ module SRPL
     
     def player?(player)
       @player_1.to_s == player.to_s || @player_2.to_s == player.to_s
+    end
+    
+    def desertion?
+      finished? && @score_1 == 0 && @score_2 == 0
+    end
+    
+    def deserted_player
+      if desertion?
+        @winner == @player_1 ? @player_2 : @player_1
+      else
+        nil
+      end
     end
     
     def ==(another_match)

@@ -14,7 +14,7 @@
   <tbody>
     <% round.sort_by{|match| match.date ? match.date : 'zzzzzzzz' }.each do |match| %>
     <tr style='<% unless match.finished? %>background-color: #bcbcbc<% end %>'>
-      <td><%= format_date(match.date) %></td>
+      <td><% if match.desertion? %>Abandon de <%= match.deserted_player.name %><% else %> <%= format_date(match.date) %> <% end %></td>
       <td align="right"><%= match.player_1 %></td>
       <td align="center" <% if match.winner == match.player_1 %>style="color: #00bf55;"<% elsif match.winner == match.player_2 %>style="color: #c31212;"<% end %>><%= match.score_1 %></td>
       <td align="center">vs</td>
