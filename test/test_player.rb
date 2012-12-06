@@ -8,7 +8,7 @@ include SRPL
 class TestPlayer < Test::Unit::TestCase
   
   def setup
-    @player = Player.new('player', wins: 0, defeats: 0, desertions: 0, opponent_desertions: 0)
+    @player = Player.new('player', {wins: 0, defeats: 0, desertions: 0, opponent_desertions: 0})
     @player_1 = Player.new('JoJoS')
     @player_2 = Player.new('Weak')
     @player_3 = Player.new('Weak')

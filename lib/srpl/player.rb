@@ -7,21 +7,21 @@ module SRPL
     include Comparable
     
     attr_reader :name # String : name of player
-    attr_reader :email # String : email of player
+    attr_reader :infos # Hash : informations of player
     attr_accessor :character # String : character playing
     attr_reader :wins, :defeats, :desertions, :opponent_desertions # Integer : scores
     attr_accessor :towards, :againsts
 
-    def initialize(name, character = '', email = '', infos = {})
+    def initialize(name, character = '', points = {}, infos = {})
       @name = name.to_s
       @character = character.to_s
-      @email = email.to_s
-      @wins = infos[:wins] ? infos[:wins].to_i : 0
-      @defeats = infos[:defeats] ? infos[:defeats].to_i : 0
-      @desertions = infos[:desertions] ? infos[:desertions].to_i : 0
-      @opponent_desertions = infos[:opponent_desertions] ? infos[:opponent_desertions].to_i : 0
-      @towards = infos[:towards] ? infos[:towards].to_i : 0
-      @againsts = infos[:againsts] ? infos[:againsts].to_i : 0
+      @wins = points[:wins] ? points[:wins].to_i : 0
+      @defeats = points[:defeats] ? points[:defeats].to_i : 0
+      @desertions = points[:desertions] ? points[:desertions].to_i : 0
+      @opponent_desertions = points[:opponent_desertions] ? points[:opponent_desertions].to_i : 0
+      @towards = points[:towards] ? points[:towards].to_i : 0
+      @againsts = points[:againsts] ? points[:againsts].to_i : 0
+      @infos = infos
     end
     
     def plays
