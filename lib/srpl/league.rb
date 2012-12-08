@@ -75,8 +75,8 @@ module SRPL
             end
           end
           
-          towards = match.player_1 == player ? match.score_1 : match.score_2
-          againsts = match.player_1 == player ? match.score_2 : match.score_1
+          towards += match.player_1 == player ? match.score_1 : match.score_2
+          againsts += match.player_1 == player ? match.score_2 : match.score_1
         end
         
         player.instance_exec(wins, defeats, desertions, towards, againsts) do |w, d, de, t, a|
