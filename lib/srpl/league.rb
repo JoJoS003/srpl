@@ -89,6 +89,14 @@ module SRPL
       end
       self
     end
+
+    def method_missing(method, *args, &block)
+      if /^round_(?<index>\w+)$/ =~ method
+        @rounds[index.to_i-1]
+      else
+        super
+      end
+    end
     
     private
     

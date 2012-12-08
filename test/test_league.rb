@@ -68,4 +68,12 @@ class TestLeague < Test::Unit::TestCase
     assert_equal(6, league.matchs.count)
   end
   
+  def test_round_index
+    @league.rounds << @r1
+    @league.rounds << @r2
+    
+    assert_equal(@r1, @league.round_1)
+    assert_equal(@r2, @league.round_2)
+  end
+  
 end
