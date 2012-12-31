@@ -30,9 +30,10 @@ module SRPL
     end
     
     # Return randomly unplayed matchs for each players
-    def round
-      round = []
+    def round(matches = [])
+      round = matches.to_a
       players = []
+      round.each { |m| players << m.player_1 << m.player_2 }
       
       @matchs.shuffle.each do |m|
         unless match_in_rounds?(m) || m.finished? || players.include?(m.player_1) || players.include?(m.player_2)
