@@ -3,7 +3,6 @@
   <thead>
     <tr>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
-      <th>Perso</th>
       <th>Joueur</th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">G.</abbr></th>
@@ -23,7 +22,6 @@
       <% last_score = player.score+player.goal_average %>
       <tr>
         <td align="center"><%= cur_rank %></td>
-        <td align="center"><img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img('ssf4', perso) %>" width="32px" /></td>
         <td><%= player.name %></td>
         <td align="center"><%= player.plays %></td>
         <td align="center" style="color: #00bf55;"><%= player.wins %></td>
@@ -37,7 +35,6 @@
   <tfooter>
     <tr>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Classement">#</abbr></th>
-      <th>Perso</th>
       <th>Joueur</th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs joués">J.</abbr></th>
       <th><abbr style="border-bottom: 1px dashed black; cursor: help;" title="Matchs gagnés">V.</abbr></th>

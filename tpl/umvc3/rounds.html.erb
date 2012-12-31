@@ -1,0 +1,33 @@
+<h2><%= round.name %></h2>
+<table width="100%">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>J1</th>
+      <th>Score J1</th>
+      <th>vs</th>
+      <th>Score J2</th>
+      <th>J2</th>
+      <th>Vidéo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% round.sort_by{|match| match.date ? match.date : 'zzzzzzzz' }.each do |match| %>
+    <tr style='<% unless match.finished? %>background-color: #bcbcbc<% end %>'>
+      <td><% if match.desertion? %>Abandon de <%= match.deserted_player.name %><% else %> <%= format_date(match.date) %> <% end %></td>
+      <td align="right"><%= match.player_1 %></td>
+      <td align="center" <% if match.winner == match.player_1 %>style="color: #00bf55;"<% elsif match.winner == match.player_2 %>style="color: #c31212;"<% end %>><%= match.score_1 %></td>
+      <td align="center">vs</td>
+      <td align="center" <% if match.winner == match.player_2 %>style="color: #00bf55;"<% elsif match.winner == match.player_1 %>style="color: #c31212;"<% end %>><%= match.score_2 %></td>
+      <td align="left"><%= match.player_2 %></td>
+      <td align="center">
+      <% if match.video %>
+        <a target='_blank' href='<%= match.video %>'>
+      <% else %>
+        <a>
+      <% end %>
+      <img title="Vidéo" src="http://shoryupif.fr/wp-content/uploads/2012/11/video_<%= match.video ? 'on' : 'off' %>.png" alt="" width="24" height="24"></a></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
