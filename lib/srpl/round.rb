@@ -10,10 +10,13 @@ module SRPL
     include MatchsContainer
     
     attr_accessor :name, :matchs
+    attr_accessor :begin, :end
     
     def initialize(name = '', matchs = [])
       @name = name
       @matchs = matchs
+      @begin = nil
+      @end = nil
     end
     
     def each(&block)

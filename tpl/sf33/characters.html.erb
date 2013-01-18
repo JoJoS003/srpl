@@ -2,7 +2,7 @@
 <ul>
   <% persos.each do |perso, count| %>
   <li style="display: inline-block; text-align: center; margin: 5px;">
-    <%= perso %> x<%= count %>
+    <img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img('sf33', perso, 'jpg') %>" width="50px" />x <%= count %>
  </li>
   <% end %>
 </ul>

@@ -67,13 +67,18 @@ module SRPL
       @league
     end
 
-    def perso_img(game, character)
-      "http://shoryupif.fr/sprites/#{game}/#{character.downcase}.png"
+    def perso_img(game, character, extension = 'png')
+      "http://shoryupif.fr/sprites/#{game}/#{character.downcase}.#{extension}"
     end
 
     def format_date(date)
-      format_in = "%Y%m%d%H%M"
-      format_out = "%d/%m/%Y à %Hh%M"
+      if date.to_s =~ /\d{12}/
+        format_in = "%Y%m%d%H%M"
+        format_out = "%d/%m/%Y à %Hh%M"
+      elsif date.to_s =~ /\d{8}/
+        format_in = "%Y%m%d"
+        format_out = "%d/%m/%Y"
+      end
 
       date ? DateTime.strptime(date, format_in).strftime(format_out) : 'à venir'
     end

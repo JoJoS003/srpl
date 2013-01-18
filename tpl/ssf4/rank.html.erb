@@ -23,7 +23,7 @@
       <% last_score = player.score+player.goal_average %>
       <tr>
         <td align="center"><%= cur_rank %></td>
-        <td align="center"><img style="display: block;" title="<%= perso %>" alt="Image <%= perso %>" src="<%= perso_img('ssf4', perso) %>" width="32px" /></td>
+        <td align="center"><img style="display: block;" title="<%= player.character %>" alt="Image <%= player.character %>" src="<%= perso_img('ssf4', player.character) %>" width="32px" /></td>
         <td><%= player.name %></td>
         <td align="center"><%= player.plays %></td>
         <td align="center" style="color: #00bf55;"><%= player.wins %></td>
