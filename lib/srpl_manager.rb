@@ -53,7 +53,7 @@ module SRPL
     private
 
     def from_players(file)
-      reg = /^(?<nick>[\w\s]+) <(?<email>[\w\d\-_.]+@[\w\d-_.]+\.[\w]{2,4})> : (?<chara>[\w\. \-]+)$/
+      reg = Regexp.new('^(?<nick>[\w\s]+) <(?<email>[\w\d\-_.]+@[\w\d-_.]+\.[\w]{2,4})> : (?<chara>[\w\. \-]+)$')
 
       @league = League.new
 
