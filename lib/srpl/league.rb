@@ -100,6 +100,18 @@ module SRPL
       end
     end
 
+    def players_in_round(round)
+      players = []
+      round.matchs.each do |m|
+        players << m.player_1 << m.player_2
+      end
+      players
+    end
+    
+    def stand_off(round)
+      @players - players_in_round(round)
+    end
+    
     private
 
     # Génère autant de matchs qu'il y a de possibilités de rencontres entre chaque joueurs
@@ -118,7 +130,7 @@ module SRPL
       end
       false
     end
-
+    
   end
 
 end

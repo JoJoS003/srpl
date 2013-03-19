@@ -32,3 +32,6 @@
     <% end %>
   </tbody>
 </table>
+<% unless round.stand_off.empty? %>
+<p>Repos pour <em><%= round.stand_off.join('</em>, <em>') %></em></p>
+<% end %>

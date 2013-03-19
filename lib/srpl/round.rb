@@ -11,10 +11,12 @@ module SRPL
     
     attr_accessor :name, :matchs
     attr_accessor :begin, :end
+    attr_accessor :stand_off
     
     def initialize(name = '', matchs = [])
       @name = name
       @matchs = matchs
+      @stand_off = []
       @begin = nil
       @end = nil
     end
